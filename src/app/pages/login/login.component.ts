@@ -1,6 +1,5 @@
-import { Component, OnInit, Inject  } from '@angular/core';
+import { Component, Inject  } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-
 import { Auth } from '../../domain/entities';
 
 @Component({
@@ -8,7 +7,7 @@ import { Auth } from '../../domain/entities';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   username = '';
   password = '';
@@ -16,19 +15,13 @@ export class LoginComponent implements OnInit {
 
   constructor(@Inject('auth') private service, private router: Router) { }
 
-  ngOnInit() {
-  }
-
-  onSubmit(formValue) {
+  onSubmit() {
     this.service
-      .loginWithCredentials(formValue.login.username, formValue.login.password)
-      .then(auth => {
-        const redirectUrl = (auth.redirectUrl === null) ? '/' : auth.redirectUrl;
+      .loginWithCredentials(this.username, this.password)
+      .subscribe(auth => {
+        this.auth = Object.assign({}, auth);
         if (!auth.hasError) {
-          this.router.navigate([redirectUrl]);
-          localStorage.removeItem('redirectUrl');
-        } else {
-          this.auth = Object.assign({}, auth);
+          this.router.navigate(['todo']);
         }
       });
   }
