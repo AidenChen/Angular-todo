@@ -1,4 +1,7 @@
 import { Component, OnInit, Inject  } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+
+import { Auth } from '../../domain/entities';
 
 @Component({
   selector: 'app-login',
@@ -9,19 +12,25 @@ export class LoginComponent implements OnInit {
 
   username = '';
   password = '';
+  auth: Auth;
 
-  constructor(@Inject('auth') private service) {
-  }
+  constructor(@Inject('auth') private service, private router: Router) { }
 
   ngOnInit() {
   }
 
-  onClick() {
-    console.log('auth result is: ' + this.service.loginWithCredentials(this.username, this.password));
-  }
-
   onSubmit(formValue) {
-    console.log(formValue);
+    this.service
+      .loginWithCredentials(formValue.login.username, formValue.login.password)
+      .then(auth => {
+        const redirectUrl = (auth.redirectUrl === null) ? '/' : auth.redirectUrl;
+        if (!auth.hasError) {
+          this.router.navigate([redirectUrl]);
+          localStorage.removeItem('redirectUrl');
+        } else {
+          this.auth = Object.assign({}, auth);
+        }
+      });
   }
 
 }
