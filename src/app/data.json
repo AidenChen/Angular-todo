@@ -32,12 +32,12 @@
   "users": [
     {
       "id": 1,
-      "username": "wang",
+      "username": "aiden",
       "password": "1234"
     },
     {
       "id": 2,
-      "username": "peng",
+      "username": "chen",
       "password": "5678"
     }
   ]
