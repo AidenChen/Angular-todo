@@ -11,7 +11,9 @@ export class AuthService {
   auth: Auth = {hasError: true, redirectUrl: '', errMsg: 'not logged in'};
   subject: ReplaySubject<Auth> = new ReplaySubject<Auth>(1);
 
-  constructor(private http: Http, @Inject('user') private userService) { }
+  constructor(private http: Http, @Inject('user') private userService) {
+    this.subject.next(this.auth);
+  }
 
   getAuth(): Observable<Auth> {
     return this.subject.asObservable();
