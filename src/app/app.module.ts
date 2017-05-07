@@ -5,20 +5,17 @@ import { HttpModule } from '@angular/http';
 import { MdlModule } from '@angular-mdl/core';
 import { routing } from './app.routes';
 
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryTodoDbService } from './pages/todo/todo.data';
-
 import { AuthService} from './services/auth.service';
+
+import { TodoModule } from './pages/todo/todo.module';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
-import { TodoComponent } from './pages/todo/todo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    TodoComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +23,7 @@ import { TodoComponent } from './pages/todo/todo.component';
     HttpModule,
     MdlModule,
     routing,
-    InMemoryWebApiModule.forRoot(InMemoryTodoDbService)
+    TodoModule
   ],
   providers: [
     {provide: 'auth', useClass: AuthService}
