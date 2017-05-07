@@ -25,12 +25,12 @@ export class TodoService {
       .catch(this.handleError);
   }
 
-  // PUT /todos/:id
+  // PATCH /todos/:id
   toggleTodo(todo: Todo): Promise<Todo> {
     const url = `${this.api_url}/${todo.id}`;
     const updatedTodo = Object.assign({}, todo, {completed: !todo.completed});
     return this.http
-      .put(url, JSON.stringify(updatedTodo), {headers: this.headers})
+      .patch(url, JSON.stringify({completed: !todo.completed}), {headers: this.headers})
       .toPromise()
       .then(() => updatedTodo)
       .catch(this.handleError);
@@ -52,6 +52,24 @@ export class TodoService {
       .toPromise()
       .then(res => res.json() as Todo[])
       .catch(this.handleError);
+  }
+
+  // GET /todos?completed=true/false
+  filterTodos(filter: string): Promise<Todo[]> {
+    switch (filter) {
+      case 'ACTIVE': return this.http
+        .get(`${this.api_url}?completed=false`)
+        .toPromise()
+        .then(res => res.json() as Todo[])
+        .catch(this.handleError);
+      case 'COMPLETED': return this.http
+        .get(`${this.api_url}?completed=true`)
+        .toPromise()
+        .then(res => res.json() as Todo[])
+        .catch(this.handleError);
+      default:
+        return this.getTodos();
+    }
   }
 
   private handleError(error: any): Promise<any> {
